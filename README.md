@@ -5,6 +5,12 @@ A small helper script that builds and installs **ROG Control Center** (from
 enabled**, for use on X11-based desktop environments (e.g. XFCE) where the
 officially packaged binary (built for Wayland) fails to launch.
 
+This repo contains two scripts:
+
+- `install-rog-control-center-x11.sh` — builds and installs everything.
+- `uninstall-rog-control-center-x11.sh` — cleanly removes what the install
+  script created (see [Uninstall](#uninstall) below).
+
 Tested on **CachyOS + XFCE (X11)**. Should work on other Arch-based
 distributions with minor adjustments to the package manager calls.
 
@@ -37,6 +43,36 @@ chmod +x install-rog-control-center-x11.sh
 
 The script will prompt for `sudo` when needed. Build logs are saved to
 `~/rog-control-center-build.log` for troubleshooting.
+
+## Uninstall
+
+A companion script, `uninstall-rog-control-center-x11.sh`, removes everything
+the install script created:
+
+```bash
+chmod +x uninstall-rog-control-center-x11.sh
+./uninstall-rog-control-center-x11.sh
+```
+
+It removes:
+
+- the installed binary (`/usr/local/bin/rog-control-center`)
+- the icon (`/usr/share/icons/hicolor/512x512/apps/rog-control-center.png`)
+- the `.desktop` menu entry
+- the local source/build directory (`~/build-asusctl`)
+- the build log file
+
+It **deliberately leaves untouched**:
+
+- the `asusd` service and the `asusctl`/`rog-control-center` distro
+  packages, since these provide the actual hardware control (fans, power
+  profiles, RGB, etc.) — removing them affects more than just this X11 GUI
+  build. Instructions to remove them manually are printed at the end of
+  the script if you want to go further.
+- `rustup`/`cargo`, since it may be used by other projects on your system.
+- build dependencies (`cmake`, `clang`, `mesa`, etc.), since they are
+  commonly shared with other packages and removing them automatically
+  could break unrelated software.
 
 ## Troubleshooting
 
